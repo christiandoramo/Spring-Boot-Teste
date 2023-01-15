@@ -1,44 +1,46 @@
 package com.christiandoramo.aula.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_user")
-public class User implements Serializable {
+@Table(name = "tb_order")
+public class Order implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
-	private String password;
-	private String email;
-	private String phone;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "client")
-	private List<Order> orders = new ArrayList<>();
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH::mm::ss'Z'", timezone = "GMT")
+	private Instant moment;
+	// private OrderStatus orderStatus;
 
-	public User() {
+	@ManyToOne
+	@JoinColumn(name = "client_id")
+	private User client;
+
+	public Order() {
+		super();
 	}
 
-	public User(Long id, String name, String password, String email, String phone) {
+	public Order(Long id, Instant moment, User client) {
+		super();
 		this.id = id;
-		this.name = name;
-		this.password = password;
-		this.email = email;
-		this.phone = phone;
+		this.moment = moment;
+		this.client = client;
 	}
 
 	public Long getId() {
@@ -49,40 +51,20 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public Instant getMoment() {
+		return moment;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setMoment(Instant moment) {
+		this.moment = moment;
 	}
 
-	public String getPassword() {
-		return password;
+	public User getClient() {
+		return client;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public List<Order> getOrders() {
-		return orders;
+	public void setClient(User client) {
+		this.client = client;
 	}
 
 	@Override
@@ -104,7 +86,7 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		User other = (User) obj;
+		Order other = (Order) obj;
 		if (id == null) {
 			if (other.id != null) {
 				return false;

@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.christiandoramo.aula.entities.User;
-import com.christiandoramo.aula.services.UserServices;
+import com.christiandoramo.aula.services.UserService;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
 
 	@Autowired
-	private UserServices userService;
+	private UserService userService;
 
 	@GetMapping
 	public ResponseEntity<List<User>> findAll() {

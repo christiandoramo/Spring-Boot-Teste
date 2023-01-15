@@ -10,7 +10,7 @@ import com.christiandoramo.aula.entities.User;
 import com.christiandoramo.aula.repositories.UserRepository;
 
 @Service
-public class UserServices {
+public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
